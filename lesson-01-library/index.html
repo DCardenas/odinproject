@@ -1,0 +1,516 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --dark: rgb(34, 34, 34);
+        --accent: rgb(47, 47, 119);
+        --alert: rgb(182, 73, 73);
+        --alert-hover: rgb(138, 48, 48);
+        --primary: rgb(51, 110, 165);
+        --primary-hover: rgb(20, 58, 93);
+
+        --shadow: 0 19px 38px rgba(0, 0, 0, 0.3),
+          0 15px 12px rgba(0, 0, 0, 0.22);
+      }
+
+      * {
+        font-family: "Lato", Arial;
+      }
+
+      body {
+        background: var(--dark);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        margin: 0px;
+      }
+
+      button {
+        cursor: pointer;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        min-width: 80px;
+      }
+
+      .row {
+        display: flex;
+        flex-direction: row;
+        width: 80%;
+        margin: 8px auto;
+        margin-top: 22px;
+      }
+
+      .row-reverse {
+        display: flex;
+        flex-direction: row-reverse;
+        width: 80%;
+        justify-content: space-between;
+        margin: 8px auto;
+      }
+
+      #title {
+        background: black;
+        padding: 0px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        animation: 0.3s fade-in;
+      }
+
+      @keyframes fade-in {
+        0% {
+          opacity: 0%;
+        }
+
+        100% {
+          opacity: 100%;
+        }
+      }
+
+      @keyframes fade-out {
+        0% {
+          opacity: 100%;
+        }
+
+        100% {
+          opacity: 0%;
+        }
+      }
+
+      .new-book-container {
+        background: white;
+        border-radius: 12px;
+        width: 400px;
+        box-sizing: border-box;
+        background: var(--accent);
+        overflow: visible;
+      }
+
+      .new-book-container h2 {
+        text-align: center;
+      }
+
+      .new-book-container form {
+        background: var(--dark);
+        padding: 20px 0px;
+        margin-block-end: 0;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+      }
+
+      .form-group {
+        margin: 8px auto;
+        display: flex;
+        flex-direction: column;
+        background: var(--dark);
+        border-radius: 10px;
+        padding: 12px;
+        width: 80%;
+        position: relative;
+      }
+
+      .form-group label {
+        display: block;
+        position: absolute;
+        top: 10px;
+        pointer-events: none;
+        transition: 0.3s top ease-in-out;
+      }
+
+      .form-group input {
+        box-sizing: border-box;
+        background: transparent;
+        color: white;
+        border: none;
+        outline: none !important;
+        border-bottom: 1px solid gainsboro;
+        padding: 8px;
+      }
+
+      .form-group input:not(:placeholder-shown) + label,
+      .form-group input:focus + label {
+        top: -10px;
+      }
+
+      .form-group button {
+        margin-top: 10px;
+      }
+
+      .inline {
+        flex-direction: row;
+        justify-content: end;
+      }
+
+      .inline label {
+        display: inline;
+      }
+
+      .row button {
+        flex: 0.5;
+        margin: 0px 4px;
+      }
+
+      .cancel {
+        background: var(--alert);
+      }
+      .cancel:hover {
+        background: var(--alert-hover);
+      }
+
+      .submit {
+        background: var(--primary);
+      }
+      .submit:hover {
+        background: var(--primary-hover);
+      }
+
+      #library-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 20px;
+      }
+
+      .book-card {
+        width: 200px;
+        height: 240px;
+        border-radius: 10px;
+        margin: 10px;
+        text-align: center;
+        box-sizing: border-box;
+        background: black;
+        display: flex;
+        flex-direction: column;
+        transition: 0.3s all ease-in-out;
+        box-shadow: var(--shadow);
+      }
+
+      .book-card[read="true"] {
+        background: rgb(223, 200, 0);
+        color: black;
+        border: 4px solid black;
+      }
+
+      .book-card[read="true"] .book-title {
+        background: rgb(223, 182, 0);
+      }
+
+      .empty {
+        border: 6px dashed gainsboro;
+        background: transparent;
+      }
+
+      .empty:hover {
+        cursor: pointer;
+      }
+
+      .empty:hover svg {
+        transition: 1s all ease-in-out;
+      }
+      .empty:hover svg {
+        transform: rotate(360deg);
+      }
+
+      .book-card:hover {
+        transform: translateY(-10px);
+      }
+
+      .book-details-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .book-details-container svg {
+        margin: 0 auto;
+      }
+
+      .book-title {
+        background: var(--accent);
+        padding-top: 10px;
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+
+      .book-card h2 {
+        padding: 0px;
+        margin: 0px;
+      }
+
+      .book-details {
+        margin-bottom: 8px;
+      }
+
+      .createdAt {
+        font-style: italic;
+        font-size: 10px;
+        align-self: flex-end;
+        margin-right: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="title">
+      <h1>My Library</h1>
+      <div id="library-details"></div>
+    </div>
+    <div id="library-container"></div>
+    <script>
+      let myLibrary = JSON.parse(window.localStorage.getItem("books") || "[]");
+
+      function Book(title, author, pages, currentPage) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.currentPage = currentPage;
+        this.read = pages === currentPage;
+        this.createdAt = new Date().toDateString();
+      }
+
+      function createInput(type, name, label, opts = {}) {
+        const container = document.createElement("div");
+        container.className = "form-group";
+
+        const inputLabel = document.createElement("label");
+        inputLabel.htmlFor = name;
+        inputLabel.innerHTML = `<span>${label}</span>`;
+
+        const input = document.createElement("input");
+        input.type = type;
+
+        if (type === "text") input.placeholder = " ";
+
+        input.name = name;
+        for (let key in opts) {
+          input[key] = opts[key];
+        }
+
+        container.appendChild(input);
+        container.appendChild(inputLabel);
+
+        return container;
+      }
+
+      function hideBookInputForm() {
+        const overlay = document.getElementsByClassName("overlay").item(0);
+        overlay.style.animation = "0.3s fade-out";
+        overlay.onanimationend = () => overlay.remove();
+      }
+
+      function showBookInputForm(e) {
+        const mode = e.currentTarget.className.includes("empty")
+          ? "create"
+          : "edit";
+        const book = myLibrary[e.currentTarget.dataset.index] || {
+          author: "",
+          title: "",
+          pages: "",
+          currentPage: "",
+        };
+
+        const overlay = document.createElement("div");
+        overlay.className = "overlay";
+
+        const container = document.createElement("div");
+        container.className = "new-book-container";
+
+        const title = document.createElement("h2");
+        title.innerHTML = `${mode === "create" ? "Add New" : "Edit"} Book`;
+
+        const form = document.createElement("form");
+
+        const titleInput = createInput("text", "title", "Title*", {
+          value: book.title,
+        });
+        const authorInput = createInput("text", "author", "Author*", {
+          value: book.author,
+        });
+        const totalPagesInput = createInput(
+          "text",
+          "totalPages",
+          "Total Pages*",
+          { value: book.pages }
+        );
+        const currentPagesInput = createInput(
+          "text",
+          "curPage",
+          "Current Page*",
+          { value: book.currentPage }
+        );
+
+        const readInput = createInput("checkbox", "read", "Read");
+        readInput.className = "row-reverse";
+
+        const buttonContainer = document.createElement("div");
+        buttonContainer.className = "row";
+
+        const submit = document.createElement("button");
+        submit.type = "submit";
+        submit.innerHTML = `${
+          mode === "create" ? "Add to Library" : "Update Book"
+        }`;
+        submit.className = "submit";
+        if (mode === "edit") {
+          submit.setAttribute("index", e.currentTarget.dataset.index);
+        }
+        const cancel = document.createElement("button");
+        cancel.innerHTML = "Cancel";
+        cancel.onclick = hideBookInputForm;
+        cancel.type = "button";
+        cancel.className = "cancel";
+
+        form.onsubmit = (e) => {
+          e.preventDefault();
+
+          if (
+            !form.elements.title.value ||
+            !form.elements.author.value ||
+            !form.elements.totalPages.value ||
+            !form.elements.curPage.value
+          ) {
+            return alert("Please fill in all required fields");
+          }
+
+          const newBook = new Book(
+            form.elements.title.value,
+            form.elements.author.value,
+            form.elements.totalPages.value,
+            form.elements.curPage.value
+          );
+
+          if (mode === "edit") {
+            updateBookInLibrary(e.submitter.getAttribute("index"), newBook);
+          } else {
+            addBookToLibrary(newBook);
+          }
+
+          hideBookInputForm();
+        };
+
+        form.appendChild(titleInput);
+        form.appendChild(authorInput);
+        form.appendChild(totalPagesInput);
+        form.appendChild(currentPagesInput);
+
+        buttonContainer.appendChild(cancel);
+        buttonContainer.appendChild(submit);
+        form.appendChild(buttonContainer);
+
+        container.appendChild(title);
+        container.appendChild(form);
+        overlay.appendChild(container);
+        document.body.appendChild(overlay);
+      }
+
+      function addBookToLibrary(book) {
+        myLibrary.unshift(book);
+        window.localStorage.setItem("books", JSON.stringify(myLibrary));
+        displayBooks();
+      }
+
+      function updateBookInLibrary(index, book) {
+        myLibrary[index] = book;
+        window.localStorage.setItem("books", JSON.stringify(myLibrary));
+        displayBooks();
+      }
+
+      function removeBookFromLibrary(index) {
+        myLibrary.splice(index, 1);
+        window.localStorage.setItem("books", JSON.stringify(myLibrary));
+        displayBooks();
+      }
+
+      function addOnclickToClass(className, cb) {
+        const els = Array.from(document.getElementsByClassName(className));
+        els.forEach((el) => (el.onclick = cb));
+      }
+
+      function displayBooks() {
+        const container = document.getElementById("library-container");
+        container.innerHTML = "";
+
+        const addBookContainer = document.createElement("div");
+        addBookContainer.className = "book-card empty";
+        addBookContainer.innerHTML = `
+          <div class="book-title"><h2>New Book</h2></div>
+          <div class="book-details-container">
+            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="60%" width="60%" xmlns="http://www.w3.org/2000/svg"><path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg>
+          </div>
+        `;
+        addBookContainer.onclick = showBookInputForm;
+
+        container.appendChild(addBookContainer);
+
+        myLibrary.forEach((book, index) => {
+          const view = document.createElement("div");
+          book.view = view;
+          view.className = "book-card";
+          view.setAttribute("index", index);
+          view.setAttribute("read", book.read);
+          view.innerHTML = `
+            <div class="book-title"><h2>${book.title}</h2></div>
+            <div class="book-details-container">
+              <div class="book-details author">Author: ${book.author}</div>
+              <div class="book-details total-pages">Total Pages: ${book.pages}</div>
+              <div class="book-details total-pages">Current Page: ${book.currentPage}</div>
+            </div>
+            <div class="book-details">
+              <button class="cancel delete-book" data-index="${index}">Delete</button>
+              <button class="submit edit-book" data-index="${index}">Edit</button>
+            </div>
+            <div class="book-details createdAt">Added: ${book.createdAt}</div>
+        `;
+          container.appendChild(view);
+        });
+
+        addOnclickToClass("delete-book", (e) => {
+          const book = myLibrary[e.target.dataset.index];
+          book.view.style.animation = "0.3s fade-out";
+          book.view.onanimationend = () => {
+            book.view.remove();
+            removeBookFromLibrary(e.target.dataset.index);
+          };
+        });
+
+        addOnclickToClass("edit-book", showBookInputForm);
+
+        updateDetails();
+      }
+
+      function updateDetails() {
+        const container = document.getElementById("library-details");
+        container.innerHTML = `
+          <span><b>Total Books:</b> ${myLibrary.length}</span>
+          <span><b>Books Read:</b> ${
+            myLibrary.filter((b) => b.read).length
+          }</span>
+        `;
+      }
+
+      window.onload = displayBooks;
+    </script>
+  </body>
+</html>
